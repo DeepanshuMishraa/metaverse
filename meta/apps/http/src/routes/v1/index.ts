@@ -5,10 +5,18 @@ import { spaceRouter } from "./space";
 
 export const rootrouter = Router();
 
-rootrouter.post("/signup", (req, res) => {
-  res.json({
-    message: "Signup route",
-  });
+rootrouter.post("/signup", async(req, res) => {
+    try{
+        const {username,email,password} = await req.body;
+
+        if(!username|| !email|| !password){
+
+        }
+    }catch(err){
+        res.json({
+            message:`Failed to signup ${err}`
+        })
+    }
 });
 
 rootrouter.post("/signin", (req, res) => {
