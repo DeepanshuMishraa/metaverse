@@ -22,6 +22,9 @@ export const createSpaceSchema = z.object({
   dimensions: z.string().regex(/^[0-9]{1,4}x[0-9]{1,4}$/),
   mapId: z.string(),
 });
+export const DeleteElementSchema = z.object({
+  id: z.string(),
+});
 
 export const addElementSchema = z.object({
   spaceId: z.string(),

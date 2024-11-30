@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+const db = require("@repo/db/client");
+
 
 export const adminRouter = Router();
 
@@ -20,5 +22,3 @@ adminRouter.post("/avatar",(req,res)=>{
 adminRouter.post("/map",(req,res)=>{
     //create a map
 })
-
-
