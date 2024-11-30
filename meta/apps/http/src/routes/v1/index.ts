@@ -98,7 +98,10 @@ rootrouter.post("/signin", async (req: any, res: any) => {
 
     // sign the jwt token
     const token = jwt.sign(
-      { username: parsedData.data.username },
+      {
+        userId: user.id,
+        role: user.role,
+      },
       JWT_SECRET as string,
       { expiresIn: "1h" }
     );
