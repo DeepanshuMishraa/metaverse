@@ -223,37 +223,31 @@ spaceRouter.delete("/element", userMiddleWare, async (req, res) => {
 });
 
 spaceRouter.get("/:spaceId", async (req, res) => {
+  // get a particular space
+
   const space = await db.space.findUnique({
     where: {
       id: req.params.spaceId,
     },
     include: {
       elements: {
-        include: {
-          element: true,
-        },
-      },
+        include:{
+            element:true,
+        }
+      }
     },
   });
 
   if (!space) {
-    res.status(400).json({ message: "Space not found" });
+    res.status(400).json({
+      message: "Space doesnt exist",
+    });
+
     return;
   }
 
-  res.json({
+  res.status(200).json({
     dimensions: `${space.width}x${space.height}`,
-    elements: space.elements.map((e) => ({
-      id: e.id,
-      element: {
-        id: e.element.id,
-        imageUrl: e.element.imageUrl,
-        width: e.element.width,
-        height: e.element.height,
-        static: e.element.static,
-      },
-      x: e.x,
-      y: e.y,
-    })),
+    elements: space.elements,
   });
 });

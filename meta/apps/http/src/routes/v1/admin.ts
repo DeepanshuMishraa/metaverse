@@ -114,5 +114,5 @@ adminRouter.post("/map", async (req, res) => {
   res.json({
     message: "Map created",
     id: map.id,
-  });
+  })
 });
