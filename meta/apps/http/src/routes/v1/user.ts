@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { updateMetadataSchema } from "../../types";
 import { userMiddleWare } from "../../middleware/user";
-const db = require("@repo/db/client");
+import db from "@repo/db/db";
 
 export const userRouter = Router();
 
@@ -47,23 +47,38 @@ userRouter.post("/metadata", userMiddleWare, async (req: any, res: any) => {
 });
 
 userRouter.get("/metadata/bulk", async (req, res) => {
-  const userIdString = (req.query.ids ?? "[]") as string;
-  const userIds = userIdString.slice(1, userIdString?.length - 1).split(",");
+  try {
+    const userIdString = (req.query.ids ?? "[]") as string;
+    const userIds = JSON.parse(userIdString); // Parse the string into an array of IDs
 
-  const metadata = await db.user.findMany({
-    where: {
-      id: userIds,
-    },
-    data: {
-      avatar: true,
-      id: true,
-    },
-  });
+    if (!Array.isArray(userIds)) {
+       res.status(400).json({
+        message: "Invalid query parameter. 'ids' should be an array.",
+      });
+      return;
+    }
 
-  res.json({
-    avatars: metadata.map((m: any) => ({
-      userId: m.id,
-      avatarId: m.avatar?.imageUrl,
-    })),
-  });
+    const metadata = await db.user.findMany({
+      where: {
+        id: {
+          in: userIds, // Use the 'in' filter for querying multiple IDs
+        },
+      },
+      select: {
+        avatar: true, // Select the avatar relation
+        id: true, // Select the user ID
+      },
+    });
+
+    res.json({
+      avatars: metadata.map((m: any) => ({
+        userId: m.id,
+        avatarId: m.avatar?.imageUrl,
+      })),
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: `Failed to fetch metadata: ${err}`,
+    });
+  }
 });
