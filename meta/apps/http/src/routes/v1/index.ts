@@ -3,7 +3,7 @@ import { userRouter } from "./user";
 import { adminRouter } from "./admin";
 import { spaceRouter } from "./space";
 import { signInSchema, signUpSchema } from "../../types";
-const db = require("@repo/db/client");
+import db from "@repo/db/db"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../../config";
@@ -27,6 +27,7 @@ rootrouter.post("/signup", async (req: any, res: any) => {
         username: parsedData.data.username,
       },
     });
+
 
     if (!user) {
       const hashedPassword = await bcrypt.hashSync(

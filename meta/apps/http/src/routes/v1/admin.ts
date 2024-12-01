@@ -1,13 +1,13 @@
 import { Router } from "express";
-
-const db = require("@repo/db/client");
+import db from "@repo/db/db"
 
 
 export const adminRouter = Router();
 
 
-adminRouter.post("/element",(req,res)=>{
+adminRouter.post("/element",async(req,res)=>{
     //create an element
+    
 })
 
 adminRouter.put("/element/:elementId",(req,res)=>{

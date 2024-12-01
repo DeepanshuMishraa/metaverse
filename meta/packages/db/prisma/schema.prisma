@@ -28,8 +28,8 @@ model User {
 model Space {
   id        String  @id @unique @default(cuid())
   name      String
-  width     Int
-  height    Int?
+  width     String
+  height    String
   thumbnail String?
   creatorId  String
   creator User @relation(fields: [creatorId],references: [id])
@@ -56,8 +56,8 @@ model Element {
 
 model Map {
   id     String  @id @unique @default(cuid())
-  width  Int
-  height Int
+  width  String
+  height String
   name   String
   elements mapElements[]
 }
