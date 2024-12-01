@@ -3,7 +3,7 @@ import { userRouter } from "./user";
 import { adminRouter } from "./admin";
 import { spaceRouter } from "./space";
 import { signInSchema, signUpSchema } from "../../types";
-import db from "@repo/db/db"
+import db from "@repo/db/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../../config";
@@ -27,7 +27,6 @@ rootrouter.post("/signup", async (req: any, res: any) => {
         username: parsedData.data.username,
       },
     });
-
 
     if (!user) {
       const hashedPassword = await bcrypt.hashSync(
@@ -117,15 +116,27 @@ rootrouter.post("/signin", async (req: any, res: any) => {
   }
 });
 
-rootrouter.get("/elements", (req, res) => {
+rootrouter.get("/elements", async (req, res) => {
+  const elements = await db.element.findMany();
   res.json({
-    message: "elements route",
+    elements: elements.map((x) => ({
+      id: x.id,
+      imageUrl: x.imageUrl,
+      width: x.width,
+      height: x.height,
+      static: x.static,
+    })),
   });
 });
 
-rootrouter.get("/avatars", (req, res) => {
+rootrouter.get("/avatars", async (req, res) => {
+  const avatars = await db.avatar.findMany();
   res.json({
-    message: " avatars route",
+    avatars: avatars.map((x) => ({
+      id: x.id,
+      imageUrl: x.imageUrl,
+      name: x.name,
+    })),
   });
 });
 
