@@ -52,6 +52,7 @@ model Element {
   height   Int
   imageUrl String
   spaces spaceElements[]
+  static Boolean
 }
 
 model Map {
