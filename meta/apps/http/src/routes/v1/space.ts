@@ -2,14 +2,14 @@ import { Router } from "express";
 import { userMiddleWare } from "../../middleware/user";
 import {
   addElementSchema,
-  createSpaceSchema,
+  CreateSpaceSchema,
   DeleteElementSchema,
 } from "../../types";
 export const spaceRouter = Router();
 import db from "@repo/db/db";
 
 spaceRouter.post("/", userMiddleWare, async (req, res) => {
-  const parsedData = createSpaceSchema.safeParse(req.body);
+  const parsedData = CreateSpaceSchema.safeParse(req.body);
 
   if (!parsedData.success) {
     res.json({

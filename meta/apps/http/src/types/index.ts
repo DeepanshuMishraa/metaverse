@@ -17,10 +17,10 @@ export const updateMetadataSchema = z.object({
   avatarId: z.string(),
 });
 
-export const createSpaceSchema = z.object({
-  name: z.string().min(3).max(255),
+export const CreateSpaceSchema = z.object({
+  name: z.string(),
   dimensions: z.string().regex(/^[0-9]{1,4}x[0-9]{1,4}$/),
-  mapId: z.string(),
+  mapId: z.string().optional(),
 });
 export const DeleteElementSchema = z.object({
   id: z.string(),
@@ -71,12 +71,3 @@ declare global {
   }
 }
 
-export type signUpSchemaType = z.infer<typeof signUpSchema>;
-export type signInSchemaType = z.infer<typeof signInSchema>;
-export type updateMetadataSchemaType = z.infer<typeof updateMetadataSchema>;
-export type createSpaceSchemaType = z.infer<typeof createSpaceSchema>;
-export type addElementSchemaType = z.infer<typeof addElementSchema>;
-export type createElementSchemaType = z.infer<typeof createElementSchema>;
-export type updateElementSchemaType = z.infer<typeof updateElementSchema>;
-export type createAvatarSchemaType = z.infer<typeof createAvatarSchema>;
-export type createMapSchemaType = z.infer<typeof createMapSchema>;
