@@ -9,22 +9,27 @@ export class RoomManager {
     this.rooms = new Map();
   }
 
-  static getInstance(){
-    if(!this.instance){
-        this.instance = new RoomManager();
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new RoomManager();
     }
 
     return this.instance;
   }
 
-  public addUser(spaceId:string,user:User){
-    this.rooms.set(spaceId,[...(this.rooms.get(spaceId) ?? []),user])
+  public addUser(spaceId: string, user: User) {
+    this.rooms.set(spaceId, [...(this.rooms.get(spaceId) ?? []), user]);
   }
 
-  public broadcast(message:OutgoingMessage,user:User,roomId:string){
-    if(!this.rooms.has(roomId)){
-        return;
+  public broadcast(message: OutgoingMessage, user: User, roomId: string) {
+    if (!this.rooms.has(roomId)) {
+      return;
     }
-    
+
+    this.rooms.get(roomId)?.forEach((u) => {
+      if (u.id !== user.id) {
+        u.send(message);
+      }
+    });
   }
 }

@@ -2,18 +2,19 @@ import { WebSocket } from "ws";
 import { RoomManager } from "./RoomManager";
 import { OutgoingMessage } from "./types";
 
-function genRandomString(length:number){
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for(let i=0;i<characters.length;i++){
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
+function genRandomString(length: number) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < characters.length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
 
-    return result;
+  return result;
 }
 
 export class User {
-    public id:string
+  public id: string;
   constructor(private ws: WebSocket) {
     this.id = genRandomString(10);
   }
@@ -23,15 +24,22 @@ export class User {
       const parsedData = JSON.parse(data.toString());
 
       switch (parsedData.type) {
-        case "join":{
-            const spaceId = parsedData.payload.spaceId
-            RoomManager.addUser(spaceId,this)
+        case "join": {
+          const spaceId = parsedData.payload.spaceId;
+          RoomManager.getInstance().addUser(spaceId, this);
+          this.send({
+            type: "join",
+            payload: {
+              spaceId: spaceId,
+              userId: this.id,
+            },
+          });
         }
       }
     });
   }
 
-  send(payload:OutgoingMessage){
-    this.ws.send(JSON.stringify(payload))
+  send(payload: OutgoingMessage) {
+    this.ws.send(JSON.stringify(payload));
   }
 }
